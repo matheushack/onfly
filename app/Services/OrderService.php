@@ -93,7 +93,7 @@ class OrderService
 
     protected function isCancellationOfApprovedOrder(int $status, Order $order): bool
     {
-        return $status === OrderStatus::CANCELED && $order->status === OrderStatus::APPROVED;
+        return $status === OrderStatus::CANCELED->value && $order->status === OrderStatus::APPROVED->value;
     }
 
     /**
@@ -104,10 +104,9 @@ class OrderService
      */
     protected function sendNotify(int $status, Order $order): void
     {
-        dd($status, OrderStatus::APPROVED);
         match ($status) {
-            OrderStatus::APPROVED => $order->notify(new OrderApprovedNotify()),
-            OrderStatus::CANCELED => $order->notify(new OrderCanceledNotify()),
+            OrderStatus::APPROVED->value => $order->notify(new OrderApprovedNotify(request()->user())),
+            OrderStatus::CANCELED->value => $order->notify(new OrderCanceledNotify(request()->user())),
             default => throw new OrderStatusNotFound()
         };
     }

@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Orders;
 
 use App\Enums\OrderStatus;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ChangeStatusRequest extends FormRequest
 {
@@ -16,9 +16,9 @@ class ChangeStatusRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::in([OrderStatus::APPROVED, OrderStatus::APPROVED]),
+                new Enum(OrderStatus::class),
                 function ($attribute, $value, $fail) {
-                    if ($value === request()->route('order')->status) {
+                    if ($value === request()->route('order')->status->value) {
                         $fail('The order is already in this status.');
                     }
                 }

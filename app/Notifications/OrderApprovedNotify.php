@@ -2,16 +2,25 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ *
+ */
 class OrderApprovedNotify extends Notification
 {
     use Queueable;
 
-    public $queue = "orders";
+    /**
+     * @param User $user
+     */
+    public function __construct(protected User $user)
+    {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -29,8 +38,7 @@ class OrderApprovedNotify extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->line("Order number {$notifiable->id} has been approved by {$this->user->name}.")
             ->line('Thank you for using our application!');
     }
 }
