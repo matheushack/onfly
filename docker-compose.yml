@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: onfly_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    environment:
+      XDEBUG_MODE: debug
+      XDEBUG_CONFIG: "client_host=host.docker.internal client_port=9003"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - redis
+    networks:
+      - onfly_network
+
+  mysql:
+    image: mysql:latest
+    container_name: onfly_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: onfly
+      MYSQL_USER: onfly
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - onfly_network
+
+  webserver:
+    image: nginx:latest
+    container_name: onfly_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - onfly_network
+
+  redis:
+    image: redis:latest
+    container_name: onfly_redis
+    restart: unless-stopped
+    networks:
+      - onfly_network
+
+networks:
+  onfly_network:
