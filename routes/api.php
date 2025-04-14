@@ -8,8 +8,6 @@ use App\Http\Controllers\OrderController;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-
     Route::controller(UserController::class)
         ->prefix('users')
         ->group(function () {
@@ -23,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', 'store');
             Route::get('/{order}', 'show');
             Route::patch('/{order}/status', 'changeStatus')
-                ->withoutScopedBindings()
+                ->name('orders.change-status')
                 ->middleware('allowed-order-status');
         });
 });

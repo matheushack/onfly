@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\OrderStatus;
 use App\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
@@ -13,10 +14,10 @@ use Illuminate\Notifications\Notification;
 /**
  *
  */
-//#[ScopedBy([UserScope::class])]
+#[ScopedBy([UserScope::class])]
 class Order extends Model
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * @var string[]
@@ -35,8 +36,8 @@ class Order extends Model
     protected function casts(): array
     {
         return [
-            'departure_at' => 'date',
-            'return_at' => 'date',
+            'departure_at' => 'datetime',
+            'return_at' => 'datetime',
             'status' => OrderStatus::class,
         ];
     }

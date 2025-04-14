@@ -25,7 +25,7 @@ class OrderService
      */
     public function index(Request $request): Paginator
     {
-        return Order::with(['user'])
+        return Order::query()
             ->when($request->filled('passenger'), function ($query) use ($request) {
                 $query->where('passenger', 'like', '%' . $request->input('passenger') . '%');
             })

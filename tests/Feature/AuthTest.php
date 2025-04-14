@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -14,8 +13,6 @@ use Illuminate\Support\Facades\Hash;
  */
 class AuthTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var User
      */

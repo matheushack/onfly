@@ -13,6 +13,8 @@ class UserScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('user_id', auth()->id());
+        if (request()->route()->getName() !== 'orders.change-status') {
+            $builder->where('user_id', auth()->id());
+        }
     }
 }

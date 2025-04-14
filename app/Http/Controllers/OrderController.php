@@ -24,18 +24,30 @@ class OrderController extends Controller
     {
     }
 
+    /**
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
     public function index(Request $request): AnonymousResourceCollection
     {
         $response = $this->service->index($request);
         return OrderResource::collection($response);
     }
 
+    /**
+     * @param StoreRequest $request
+     * @return OrderResource
+     */
     public function store(StoreRequest $request): OrderResource
     {
         $response = $this->service->store($request->validated(), $request->user());
         return OrderResource::make($response);
     }
 
+    /**
+     * @param Order $order
+     * @return OrderResource
+     */
     public function show(Order $order): OrderResource
     {
         $response = $this->service->show($order);
